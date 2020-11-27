@@ -5,6 +5,7 @@
 #include <sstream>
 #include "Customer.h"
 #include "Administrator.h"
+#include "Utils.h"
 
 Customer& Customer::operator=(const Customer& customer)
 {
@@ -68,17 +69,8 @@ void depositMoney(vector<Customer>& customers)
 	int numberID{};
 	cin >> numberID;
 
-	// bedziemy szukac, czy podany numer z klawiatury zgadza sie z któryms, co mamy go w bazie
-	// na pocz¹tku robimy sobie wektor naszych ID
-	vector<int> IDnumbers{};
-	for (auto customer : customers)
-	{
-		IDnumbers.push_back(customer.getNumber());
-	}
-
-	vector<int>::iterator iter;
-	iter = find(IDnumbers.begin(), IDnumbers.end(), numberID);
-	if (iter != IDnumbers.end())
+	
+	if (foundID(customers, numberID))
 	{
 		cout << "Prosze podac, ile pieniedzy chce Pan/i wplacic: ";
 		double money{};
@@ -91,7 +83,7 @@ void depositMoney(vector<Customer>& customers)
 		double currentBalance{ customers[numberID - 1].getAmountOfMoney() };
 
 		// i ka¿demy adminowi wpisaæ to do pliku
-		admin1.updateBalance(customers[numberID - 1], currentBalance);
+		admin1.updateBalance(customers[numberID - 1], currentBalance, customers);
 
 	}
 
@@ -108,18 +100,8 @@ void withdrawMoney(vector<Customer>& customers)
 	cout << "Prosze podac numer konta: ";
 	int number{};
 	cin >> number;
-
-	// bedziemy szukac, czy podany numer z klawiatury zgadza sie z któryms, co mamy go w bazie
-	// na pocz¹tku robimy sobie wektor naszych ID
-	vector<int> numbersID{};
-	for (auto customer : customers)
-	{
-		numbersID.push_back(customer.getNumber());
-	}
-
-	vector<int>::iterator iter;
-	iter = find(numbersID.begin(), numbersID.end(), number);
-	if (iter != numbersID.end())
+	
+	if (foundID(customers, number))
 	{
 		cout << "Prosze podac, ile pieniedzy chce Pan/i wyplacic: ";
 		double money{};
@@ -132,7 +114,7 @@ void withdrawMoney(vector<Customer>& customers)
 		double currentBalance{ customers[number - 1].getAmountOfMoney() };
 
 		// i ka¿demy adminowi wpisaæ to do pliku
-		admin1.updateBalance(customers[number - 1], currentBalance);
+		admin1.updateBalance(customers[number - 1], currentBalance, customers);
 	}
 
 	else
@@ -151,25 +133,14 @@ void transferMoney(vector<Customer>& customers)
 	int numberID_source{};
 	cin >> numberID_source;
 
-	// robimy sobie wektor ID_Numbers
-	vector<int> numbersID{};
-	for (auto customer : customers)
-	{
-		numbersID.push_back(customer.getNumber());
-	}
 
-	vector<int>::iterator iter_source;
-	iter_source = find(numbersID.begin(), numbersID.end(), numberID_source);
-
-	if (iter_source != numbersID.end())
+	if (foundID(customers, numberID_source))
 	{
 		cout << "Prosze podac, komu chce Pan/i przelac pieniadze: ";
 		int numberID_destination{};
 		cin >> numberID_destination;
 
-		vector<int>::iterator iter_destination;
-		iter_destination = find(numbersID.begin(), numbersID.end(), numberID_destination);
-		if (iter_destination != numbersID.end())
+		if (foundID(customers, numberID_destination))
 		{
 			cout << "Prosze podac, ile pieniedzy chce Pan/i przelac: ";
 			double moneySent{};
@@ -195,8 +166,8 @@ void transferMoney(vector<Customer>& customers)
 			double currentBalance_destination{ customers[numberID_destination - 1].getAmountOfMoney() };
 
 			// i ka¿demy adminowi wpisaæ to do pliku
-			admin1.updateBalance(customers[numberID_source - 1], currentBalance_source);
-			admin1.updateBalance(customers[numberID_destination - 1], currentBalance_destination);
+			admin1.updateBalance(customers[numberID_source - 1], currentBalance_source, customers);
+			admin1.updateBalance(customers[numberID_destination - 1], currentBalance_destination, customers);
 		}
 		else
 		{

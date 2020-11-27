@@ -3,63 +3,7 @@
 #include <sstream>
 #include "Customer.h"
 #include "Administrator.h"
-using namespace std;
-
-vector<string> readLines()
-{
-	// potrzebujemy tej funkcji, ¿eby za³adowaæ dane o ju¿ utworzonych klientach
-	ifstream file{ "sample.txt" };
-
-	// jeœli nie bêdziemy mogli otworzyæ pliku
-	if (!file)
-	{
-		cerr << "Nie mozna otworzyc pliku" << endl;
-	}
-
-	// wektor, w którym bêdziemy zbieraæ zczytane linijki tekstu
-	vector<string> lines{};
-
-	if (file.good())
-	{
-		while (file)
-		{
-			string lineOfText{};
-			getline(file, lineOfText);
-			if (lineOfText.size() < 2)
-			{
-				continue;
-			}
-			lines.push_back(lineOfText);
-		}
-	}
-	file.close();
-	return lines;
-}
-
-RawData parseLine(string line)
-{
-	size_t index1 = line.find(",", 0);
-	string name = line.substr(0, index1);
-
-
-	line.erase(0, index1 + 1);
-	size_t index2 = line.find(",", 0);
-	string surname = line.substr(0, index2);
-
-	line.erase(0, index2 + 1);
-	stringstream s(line);
-	int number{};
-	char dot{};
-	double amountOfMoney{};
-	s >> number >> dot >> amountOfMoney;
-
-	RawData r;
-	r.name = name;
-	r.surname = surname;
-	r.IDnumber = number;
-	r.amountOfMoney = amountOfMoney;
-	return r;
-}
+#include "Utils.h"
 
 vector<Customer> Administrator::loadState()
 {
@@ -101,7 +45,7 @@ Customer Administrator::openAccount()
 	Customer newCustomer{ name, surname, amountOfMoney };
 
 
-	// zapisujemy do pliku
+	// zapisujemy na koniec pliku
 	ofstream file{ "sample.txt", ios_base::app };
 
 	if (!file)
@@ -117,7 +61,7 @@ Customer Administrator::openAccount()
 }
 
 
-void Administrator::updateBalance(Customer& customer,  double currentBalance)
+void Administrator::updateBalance(Customer& customer,  double currentBalance, vector<Customer>& customers)
 {
 	// zczytujemy sobie wszystkie linijki z pliku
 	vector<string> lines{ readLines() };
@@ -126,14 +70,13 @@ void Administrator::updateBalance(Customer& customer,  double currentBalance)
 	int customerID{ customer.getNumber() };
 
 	// zczytujemy sobie jego dane i przy okazji uaktualniamy stan konta
-	RawData r = parseLine(lines[customerID - 1]);
-	string name{r.name};
-	string surname{r.surname};
-	int IDnumber{r.IDnumber};
-	double amountOfMoney{currentBalance};
-	
+	customers[customerID - 1].setAmountOfMoney(currentBalance);
+
 	// teraz konstruujemy zmodyfikowany string który wpiszemy do pliku
-	lines[customerID - 1] = { name + "," + surname + "," + to_string(IDnumber) + "," + to_string(amountOfMoney) };
+	lines[customerID - 1] = { customers[customerID - 1].getName() + ","
+		+ customers[customerID -1].getSurname() + "," 
+		+ to_string(customers[customerID - 1].getNumber()) + "," 
+		+ to_string(customers[customerID -1].getAmountOfMoney()) };
 
 	// i wpisujemy do pliku
 	updateFile (lines);
@@ -167,17 +110,8 @@ void Administrator::modifyRecord(vector<Customer>& customers)
 	int numberIDToModify{};
 	cin >> numberIDToModify;
 
-	// robimy sobie wektor ID
-	vector<int> IDnumbers{};
-	for (auto customer : customers)
-	{
-		IDnumbers.push_back(customer.getNumber());
-	}
 
-	vector<int>::iterator iter;
-	iter = find(IDnumbers.begin(), IDnumbers.end(), numberIDToModify);
-
-	if (iter != IDnumbers.end())
+	if (foundID(customers, numberIDToModify))
 	{
 		cout << "Prosze podac nowe imie: ";
 		string name{};
@@ -214,19 +148,7 @@ void Administrator::deleteRecord(vector<Customer> &customers)
 	int numberIDToDelete{};
 	cin >> numberIDToDelete;
 
-	// robimy sobie wektor ID
-	vector<int> IDnumbers{};
-	for (auto customer : customers)
-	{
-		IDnumbers.push_back(customer.getNumber());
-	}
-
-	vector<int>::iterator iter;
-	iter = find(IDnumbers.begin(), IDnumbers.end(), numberIDToDelete);
-
-
-
-	if (iter != IDnumbers.end())
+	if (foundID(customers, numberIDToDelete))
 	{
 		// usuwamy ten element wektora
 		customers.erase(customers.begin() + numberIDToDelete - 1);
