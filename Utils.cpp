@@ -44,11 +44,13 @@ RawData parseLine(string line)
 	string surname = line.substr(0, index2);
 
 	line.erase(0, index2 + 1);
+	
 	stringstream s(line);
 	int number{};
 	char dot{};
 	double amountOfMoney{};
 	s >> number >> dot >> amountOfMoney;
+	
 
 	RawData r;
 	r.name = name;

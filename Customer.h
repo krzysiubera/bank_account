@@ -47,9 +47,7 @@ public:
 	void subtractMoney(double money);
 };
 
-void depositMoney(vector<Customer>& customers);
-void withdrawMoney(vector<Customer>& customers);
-void transferMoney(vector<Customer>& customers);
+
 
 #endif // ! CUSTOMER_H
 

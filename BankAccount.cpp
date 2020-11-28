@@ -3,6 +3,7 @@
 #include <vector>
 #include "Customer.h"
 #include "Administrator.h"
+#include "MoneyManagement.h"
 using namespace std;
 
 
@@ -20,13 +21,14 @@ int main()
 	do
 	{
 		cout << "Prosze podac opcje, ktora chce Pan/i wybrac: \n";
-		cout << "1. Wyswietlic wszystkie konta: \n";
-		cout << "2. Zalozyc konto \n";
-		cout << "3. Wplacic pieniadze: \n";
-		cout << "4. Wyplacic pieniadze: \n";
-		cout << "5. Przelac pieniadze: \n";
-		cout << "6. Zmodyfikowac rekord \n";
-		cout << "7. Zlikwidowac rekord \n";
+		cout << "1. Wyswietlic wszystkie konta (administrator): \n";
+		cout << "2. Zalozyc konto (administrator): \n";
+		cout << "3. Wplacic pieniadze (klient): \n";
+		cout << "4. Wyplacic pieniadze: (klient): \n";
+		cout << "5. Przelac pieniadze (klient): \n";
+		cout << "6. Wyswietlic stan swojego konta (klient): \n";
+		cout << "7. Zmodyfikowac rekord (administrator): \n";
+		cout << "8. Zlikwidowac rekord (administrator): \n";
 		cout << '\n';
 
 		cin >> option;
@@ -35,7 +37,7 @@ int main()
 		{
 		case '1':
 			// administrator pokazuje wszystkie konta
-			admin1.showAccounts(customers);
+			admin1.showAllAccounts(customers);
 			break;
 		case '2':
 			// administrator otwiera konto i zapisuje je do pliku
@@ -54,15 +56,19 @@ int main()
 			transferMoney(customers);
 			break;
 		case '6':
+			// klient chce wyświetlić stan swojego konta
+			showAccount(customers);
+			break;
+		case '7':
 			// pozwalamy adminowi zmodyfikować wybrany reokrd
 			admin1.modifyRecord(customers);
 			break;
-		case '7':
+		case '8':
 			// pozwalamy adminowi wykasować wybrany rekord
 			admin1.deleteRecord(customers);
 			break;
 		} 
-	} while (option != '8');
+	} while (option != '9');
 
 	return 0;
 }

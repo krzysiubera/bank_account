@@ -21,7 +21,7 @@ vector<Customer> Administrator::loadState()
 	return customers;
 }
 
-void Administrator::showAccounts(vector<Customer>& customers)
+void Administrator::showAllAccounts(vector<Customer>& customers)
 {
 	for (auto customer : customers)
 		cout << customer << '\n';
@@ -70,7 +70,7 @@ void Administrator::updateBalance(Customer& customer,  double currentBalance, ve
 	int customerID{ customer.getNumber() };
 
 	// zczytujemy sobie jego dane i przy okazji uaktualniamy stan konta
-	customers[customerID - 1].setAmountOfMoney(currentBalance);
+	// customers[customerID - 1].setAmountOfMoney(currentBalance);
 
 	// teraz konstruujemy zmodyfikowany string który wpiszemy do pliku
 	lines[customerID - 1] = { customers[customerID - 1].getName() + ","

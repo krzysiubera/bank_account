@@ -11,7 +11,7 @@ public:
 
 	vector<Customer> loadState();
 	Customer openAccount();
-	void showAccounts(vector<Customer>& customer);
+	void showAllAccounts(vector<Customer>& customer);
 	void updateBalance(Customer& customer,  double currentBalance, vector<Customer>& customers);
 	void updateFile(vector<string> lines);
 	void modifyRecord(vector<Customer>& customers);
