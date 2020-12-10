@@ -26,7 +26,7 @@ int Customer::acquireNumber()
 {
 	// pozwala nabyæ ID u¿ykownikowi
 	static int s_id{ 0 };
-	return ++s_id;
+	return (++s_id - 1);
 }
 
 // gettery

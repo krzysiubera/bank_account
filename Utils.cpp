@@ -1,6 +1,38 @@
 #include "Utils.h"
 #include <fstream>
 #include <sstream>
+#include <limits>
+
+int getOption()
+{
+	cout << "Prosze podac opcje, ktora chce Pan/i wybrac: \n";
+	cout << "1. Wyswietlic wszystkie konta (administrator): \n";
+	cout << "2. Zalozyc konto (administrator): \n";
+	cout << "3. Wplacic pieniadze (klient): \n";
+	cout << "4. Wyplacic pieniadze: (klient): \n";
+	cout << "5. Przelac pieniadze (klient): \n";
+	cout << "6. Wyswietlic stan swojego konta (klient): \n";
+	cout << "7. Zmodyfikowac rekord (administrator): \n";
+	cout << "8. Zlikwidowac rekord (administrator): \n";
+	cout << "9. Zakonczyc dzialanie programu. \n";
+	cout << '\n';
+
+	int option{};
+	cin >> option;
+
+	if (cin.fail())
+	{
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Prosze podac prawidlowa liczbe" << '\n';
+	}
+	else
+	{
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		return option;
+	}
+}
+
 
 vector<string> readLines()
 {

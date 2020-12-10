@@ -70,7 +70,7 @@ void Administrator::updateBalance(Customer& customer,  double currentBalance, ve
 	int customerID{ customer.getNumber() };
 
 	// zczytujemy sobie jego dane i przy okazji uaktualniamy stan konta
-	// customers[customerID - 1].setAmountOfMoney(currentBalance);
+	customers[customerID].setAmountOfMoney(currentBalance);
 
 	// teraz konstruujemy zmodyfikowany string który wpiszemy do pliku
 	lines[customerID - 1] = { customers[customerID - 1].getName() + ","
@@ -126,11 +126,11 @@ void Administrator::modifyRecord(vector<Customer>& customers)
 		cin >> amountOfMoney;
 		
 		// podmieniamy stare dane na nowe dane za pomoc¹ przeci¹¿onego operatora przypisania
-		customers[numberIDToModify - 1] = Customer(name, surname, amountOfMoney);
+		customers[numberIDToModify] = Customer(name, surname, amountOfMoney);
 
 		// konstruujemy string który wpiszemy do pliku
 		string temp{ name + "," + surname + "," + to_string(numberIDToModify) + "," + to_string(amountOfMoney) };
-		lines[numberIDToModify - 1] = temp;
+		lines[numberIDToModify] = temp;
 
 		// i wpisujemy do pliku
 		updateFile(lines);
@@ -151,7 +151,7 @@ void Administrator::deleteRecord(vector<Customer> &customers)
 	if (foundID(customers, numberIDToDelete))
 	{
 		// usuwamy ten element wektora
-		customers.erase(customers.begin() + numberIDToDelete - 1);
+		customers.erase(customers.begin() + numberIDToDelete);
 		
 
 		// nale¿y te¿ zmieniæ ID wszystkim u¿ytkownikom znajduj¹cym siê za u¿ytkownikiem usuniêtym
@@ -161,7 +161,7 @@ void Administrator::deleteRecord(vector<Customer> &customers)
 		{
 			if (customer.getNumber() > numberIDToDelete)
 			{
-				int temp{ customer.getNumber() - 1};
+				int temp{ customer.getNumber()};
 				customer.setNumber(temp);
 			}
 		}

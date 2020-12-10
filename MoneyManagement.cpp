@@ -19,13 +19,13 @@ void depositMoney(vector<Customer>& customers)
 		cin >> money;
 
 		// przesuniêcie wynika z tego, ¿e nasi klienci s¹ ponumerowani od 1
-		(customers[numberID - 1]).addMoney(money);
+		(customers[numberID]).addMoney(money);
 
 		// chcemy zapisaæ do pliku, dlatego pobieramy stan konta
-		double currentBalance{ customers[numberID - 1].getAmountOfMoney() };
+		double currentBalance{ customers[numberID].getAmountOfMoney() };
 
 		// i ka¿demy adminowi wpisaæ to do pliku
-		admin1.updateBalance(customers[numberID - 1], currentBalance, customers);
+		admin1.updateBalance(customers[numberID], currentBalance, customers);
 
 	}
 
@@ -49,8 +49,7 @@ void withdrawMoney(vector<Customer>& customers)
 		double money{};
 		cin >> money;
 
-		// przesuniêcie wynika z tego, ¿e nasi klienci s¹ ponumerowani od 1
-		(customers[number - 1]).subtractMoney(money);
+		(customers[number]).subtractMoney(money);
 
 		// chcemy zapisaæ do pliku, dlatego pobieramy stan konta
 		double currentBalance{ customers[number - 1].getAmountOfMoney() };
@@ -91,10 +90,10 @@ void transferMoney(vector<Customer>& customers)
 			// przesuniêcie wynika z tego, ¿e nasi klienci s¹ ponumerowani od 1
 			// dodajemy i odejmujemy pieni¹dze odpowiednio
 			// musimy jeszcze sprawdziæ, czy osoba, która chce przelaæ ma wystarczaj¹co pieniêdzy
-			if (customers[numberID_source - 1].getAmountOfMoney() >= moneySent)
+			if (customers[numberID_source].getAmountOfMoney() >= moneySent)
 			{
-				(customers[numberID_source - 1]).subtractMoney(moneySent);
-				(customers[numberID_destination - 1]).addMoney(moneySent);
+				(customers[numberID_source]).subtractMoney(moneySent);
+				(customers[numberID_destination]).addMoney(moneySent);
 			}
 
 			else
@@ -104,12 +103,12 @@ void transferMoney(vector<Customer>& customers)
 			}
 
 			// chcemy zapisaæ do pliku, dlatego pobieramy stan konta
-			double currentBalance_source{ customers[numberID_source - 1].getAmountOfMoney() };
-			double currentBalance_destination{ customers[numberID_destination - 1].getAmountOfMoney() };
+			double currentBalance_source{ customers[numberID_source].getAmountOfMoney() };
+			double currentBalance_destination{ customers[numberID_destination].getAmountOfMoney() };
 
 			// i ka¿demy adminowi wpisaæ to do pliku
-			admin1.updateBalance(customers[numberID_source - 1], currentBalance_source, customers);
-			admin1.updateBalance(customers[numberID_destination - 1], currentBalance_destination, customers);
+			admin1.updateBalance(customers[numberID_source], currentBalance_source, customers);
+			admin1.updateBalance(customers[numberID_destination], currentBalance_destination, customers);
 		}
 		else
 		{
@@ -132,7 +131,7 @@ void showAccount(vector<Customer>& customers)
 
 	if (foundID(customers, numberID))
 	{
-		cout << customers[numberID - 1] << '\n';
+		cout << customers[numberID] << '\n';
 	}
 	else
 	{
