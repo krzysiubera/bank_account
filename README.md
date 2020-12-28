@@ -1,1 +1,1 @@
-Bank account system written in c++
+simple bank account system
