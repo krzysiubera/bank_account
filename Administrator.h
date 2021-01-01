@@ -3,19 +3,27 @@
 
 #include <vector>
 #include "Customer.h"
-#include "Administrator.h"
+#include "Utils.h"
 
 class Administrator
 {
 public:
 
+	/* this function loads data from .txt file at the beginning of the program*/
 	vector<Customer> loadState();
-	Customer openAccount();
-	void showAllAccounts(vector<Customer>& customer);
-	void updateBalance(Customer& customer,  double currentBalance, vector<Customer>& customers);
-	void updateFile(vector<string> lines);
+
+	/* this function lets us open account*/
+	void openAccount(vector<Customer>& customers);
+
+	/* this function lets us see all accounts*/
+	void showAllAccounts(vector<Customer>& customers);
+
+	/* this function lets us modify given record*/
 	void modifyRecord(vector<Customer>& customers);
+
+	/* this function lets us delete given record*/
 	void deleteRecord(vector<Customer>& customers);
+
 };
 
 

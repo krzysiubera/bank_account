@@ -1,34 +1,35 @@
 #include "Utils.h"
-#include <fstream>
-#include <sstream>
-#include <limits>
 
 int getOption()
 {
-	cout << "Prosze podac opcje, ktora chce Pan/i wybrac: \n";
-	cout << "1. Wyswietlic wszystkie konta (administrator): \n";
-	cout << "2. Zalozyc konto (administrator): \n";
-	cout << "3. Wplacic pieniadze (klient): \n";
-	cout << "4. Wyplacic pieniadze: (klient): \n";
-	cout << "5. Przelac pieniadze (klient): \n";
-	cout << "6. Wyswietlic stan swojego konta (klient): \n";
-	cout << "7. Zmodyfikowac rekord (administrator): \n";
-	cout << "8. Zlikwidowac rekord (administrator): \n";
-	cout << "9. Zakonczyc dzialanie programu. \n";
+	cout << "Please enter an option to choose: \n";
+	cout << "1. Show all accounts (administrator): \n";
+	cout << "2. Create new account (administrator): \n";
+	cout << "3. Deposit money (client): \n";
+	cout << "4. Withdraw money: (client): \n";
+	cout << "5. Transfer money to other account (client): \n";
+	cout << "6. Show state of account (client): \n";
+	cout << "7. Modify a record (administrator): \n";
+	cout << "8. Delete a record (administrator): \n";
+	cout << "9. End the program \n";
 	cout << '\n';
 
 	int option{};
 	cin >> option;
 
-	if (cin.fail())
-	{
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Prosze podac prawidlowa liczbe" << '\n';
+	/* if user wants to end the program, then we do it immediately*/
+	if (option == 9)
+		return option;
+
+	/* if extraction of input has failed */
+	if (cin.fail()){
+		cin.clear();											/* then we clear the flag of error */
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');	/* clean input buffer*/
+		cout << "Wrong data" << '\n';
 	}
-	else
-	{
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	/* if extraction of input has not failed*/
+	else {
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');	/* clear input buffer */
 		return option;
 	}
 }
@@ -36,28 +37,23 @@ int getOption()
 
 vector<string> readLines()
 {
-	// potrzebujemy tej funkcji, ¿eby za³adowaæ dane o ju¿ utworzonych klientach
+	/* Open file*/
 	ifstream file{ "sample.txt" };
 
-	// jeœli nie bêdziemy mogli otworzyæ pliku
-	if (!file)
-	{
+	/* Check if file has been opened*/
+	if (!file){
 		cerr << "Nie mozna otworzyc pliku" << endl;
 	}
 
-	// wektor, w którym bêdziemy zbieraæ zczytane linijki tekstu
+	/* We will store lines in this vector*/
 	vector<string> lines{};
 
-	if (file.good())
-	{
-		while (file)
-		{
+	if (file.good()){
+		while (file){
 			string lineOfText{};
 			getline(file, lineOfText);
 			if (lineOfText.size() < 2)
-			{
 				continue;
-			}
 			lines.push_back(lineOfText);
 		}
 	}
@@ -104,4 +100,27 @@ bool foundID(vector<Customer>& customers, int number)
 	iter = find(IDnumbers.begin(), IDnumbers.end(), number);
 
 	return (iter != IDnumbers.end());
+}
+
+void saveToFile(vector<Customer> customers)
+{
+	/* Creating vector of strings with needed data*/
+	vector<string> lines{};
+	for (auto customer : customers) {
+		lines.push_back(customer.getName() + "," + customer.getSurname() + "," +
+			to_string(customer.getNumber()) + "," + to_string(customer.getAmountOfMoney()));
+	}
+
+	/* Opening file*/
+	ofstream file{ "sample.txt" };
+	if (!file)
+		cerr << "File could not be opened" << endl;
+
+	/*Writing to file*/
+	for (size_t count{ 0 }; count < lines.size(); ++count) {
+		file << lines[count] << endl;
+	}
+
+	/* Closing file */
+	file.close();
 }

@@ -1,9 +1,9 @@
 #ifndef  CUSTOMER_H
 #define CUSTOMER_H
 
-
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 class Customer
@@ -15,39 +15,42 @@ private:
 	double m_amountOfMoney{};
 
 public:
-	// tu mamy konstruktor dla nowo stworzonego klienta - numer ID dla niego 
-	// zostaje nabyty za pomoc¹ funkcji acquireNumber
+	/* Constructor for created client */
 	Customer(string name, string surname, double amountOfMoney):
 		m_name{ name }, m_surname{ surname }, m_amountOfMoney{ amountOfMoney }
 	{
 		m_numberID = acquireNumber();
 	}
 
-	// musimy stworzyæ te¿ konstruktora dla danych wczytanych z pliku
-	// numer ID dla niego  zczytujemy z pliku
+	/* Constructor for client read from file*/
 	Customer(string name, string surname, int number_ID, double amountOfMoney):
 		m_name{name}, m_surname{surname}, m_numberID{number_ID}, m_amountOfMoney{amountOfMoney} 
 	{	
 		int temp{ acquireNumber() };
 	}
 
-
+	/* Overloaded << operator and assignment operator */
 	Customer& operator=(const Customer& customer);
 	friend ostream& operator<<(ostream& out, const Customer& customer);
+
+	/* This function gives ID to new users*/
 	int acquireNumber();
+
+	/* Getters*/
 	int getNumber() const;
 	string getName() const;
 	string getSurname() const ;
 	double getAmountOfMoney() const ;
+
+	/*Setters*/
 	void setName(string name);
 	void setSurname(string surname);
 	void setAmountOfMoney(double money);
 	void setNumber(int number);
+
+	/* These functions modify amount of money of users*/
 	void addMoney(double money);
 	void subtractMoney(double money);
 };
 
-
-
 #endif // ! CUSTOMER_H
-

@@ -1,18 +1,11 @@
-#include <vector>
-#include <fstream>
-#include <sstream>
-#include "Customer.h"
 #include "Administrator.h"
-#include "Utils.h"
 
 vector<Customer> Administrator::loadState()
 {
 	vector<string> lines{ readLines() };
-
 	vector<Customer> customers{};
 
-	for (auto line : lines)
-	{
+	for (auto line : lines){
 		RawData r = parseLine(line);
 		Customer customer(r.name, r.surname, r.IDnumber, r.amountOfMoney);
 		customers.push_back(customer);
@@ -28,9 +21,9 @@ void Administrator::showAllAccounts(vector<Customer>& customers)
 	cout << '\n';
 }
 
-Customer Administrator::openAccount()
+void Administrator::openAccount(vector<Customer>& customers)
 {
-	// prosimy u¿ytkownika o podanie danych
+	/* User gives his data */
 	string name{};
 	string surname{};
 	double amountOfMoney{};
@@ -41,143 +34,71 @@ Customer Administrator::openAccount()
 	cout << "Prosze podac poczatkowy balans: ";
 	cin >> amountOfMoney;
 
-	// tworzymy obiekt klasy Customer - nasz nowy klient
+	/* Creating new user and adding him to the vector of customers*/
 	Customer newCustomer{ name, surname, amountOfMoney };
+	customers.push_back(newCustomer);
 
-
-	// zapisujemy na koniec pliku
-	ofstream file{ "sample.txt", ios_base::app };
-
-	if (!file)
-	{
-		cerr << "Nie mozna otworzyc pliku! " << endl;
-	}
-
-	file << endl;
-	file << name << "," << surname << "," << newCustomer.getNumber() << "," << amountOfMoney;
-	file.close();
-
-	return newCustomer;
-}
-
-
-void Administrator::updateBalance(Customer& customer,  double currentBalance, vector<Customer>& customers)
-{
-	// zczytujemy sobie wszystkie linijki z pliku
-	vector<string> lines{ readLines() };
-	
-	// sprawdzamy który klient poprosi³ nas o uaktualnienie jego stanu konta
-	int customerID{ customer.getNumber() };
-
-	// zczytujemy sobie jego dane i przy okazji uaktualniamy stan konta
-	customers[customerID].setAmountOfMoney(currentBalance);
-
-	// teraz konstruujemy zmodyfikowany string który wpiszemy do pliku
-	lines[customerID - 1] = { customers[customerID - 1].getName() + ","
-		+ customers[customerID -1].getSurname() + "," 
-		+ to_string(customers[customerID - 1].getNumber()) + "," 
-		+ to_string(customers[customerID -1].getAmountOfMoney()) };
-
-	// i wpisujemy do pliku
-	updateFile (lines);
-}
-
-void Administrator::updateFile(vector<string> lines)
-{
-	ofstream file{ "sample.txt" };
-	
-	if (!file)
-	{
-		cerr << "Nie mozna otworzyc pliku! " << endl;
-	}
-
-	for (size_t count{ 0 }; count < lines.size(); ++count)
-	{
-		file << lines[count];
-		file << endl;
-		
-	}
-
-	file.close();
+	/* save to file*/
+	saveToFile(customers);
 }
 
 void Administrator::modifyRecord(vector<Customer>& customers)
 {
-	// zczytujemy sobie wszystkie linjki z pliku
-	vector<string> lines{ readLines() };
-
-	cout << "Prosze podac numer rekordu do zmodyfikowania: ";
+	cout << "Enter number ID to modify: ";
 	int numberIDToModify{};
 	cin >> numberIDToModify;
 
-
-	if (foundID(customers, numberIDToModify))
-	{
-		cout << "Prosze podac nowe imie: ";
+	if (foundID(customers, numberIDToModify)){
+		/* Administrator gives new data of customer*/
+		cout << "Enter new name: ";
 		string name{};
 		cin >> name;
 
-		cout << "Prosze podac nowe nazwisko: ";
+		cout << "Enter new surname: ";
 		string surname{};
 		cin >> surname;
 
-		cout << "Prosze podac nowa ilosc pieniedzy na koncie: ";
+		cout << "Enter new amount of money: ";
 		double amountOfMoney{};
 		cin >> amountOfMoney;
 		
-		// podmieniamy stare dane na nowe dane za pomoc¹ przeci¹¿onego operatora przypisania
+		/* Change data of customer by overloading the operator of assignment*/
 		customers[numberIDToModify] = Customer(name, surname, amountOfMoney);
 
-		// konstruujemy string który wpiszemy do pliku
-		string temp{ name + "," + surname + "," + to_string(numberIDToModify) + "," + to_string(amountOfMoney) };
-		lines[numberIDToModify] = temp;
-
-		// i wpisujemy do pliku
-		updateFile(lines);
+		/* save it to file*/
+		saveToFile(customers);
 	}
-	else
-	{
-		cout << "Nie znaleziono takiego ID w bazie" << '\n';
+	else{
+		cout << "Could not find ID" << '\n';
+		return;
 	}
 }
 
 
 void Administrator::deleteRecord(vector<Customer> &customers)
 {
-	cout << "Prosze podac numer rekordu do wykasowania: ";
+	cout << "Enter ID of customer, which will be deleted: ";
 	int numberIDToDelete{};
 	cin >> numberIDToDelete;
 
-	if (foundID(customers, numberIDToDelete))
-	{
-		// usuwamy ten element wektora
+	if (foundID(customers, numberIDToDelete)){
+		/* Erase given customer */
 		customers.erase(customers.begin() + numberIDToDelete);
 		
-
-		// nale¿y te¿ zmieniæ ID wszystkim u¿ytkownikom znajduj¹cym siê za u¿ytkownikiem usuniêtym
-		// poniewa¿ musimy zapewniæ unikatowoœæ ID
-		// wtedy te¿ modyfikujemy linijkê pliku
-		for (auto customer : customers)
-		{
-			if (customer.getNumber() > numberIDToDelete)
-			{
+		/* Change ID number of customers that are behind deleted customer */
+		for (auto customer : customers){
+			if (customer.getNumber() > numberIDToDelete){
 				int temp{ customer.getNumber()};
 				customer.setNumber(temp);
 			}
 		}
-
-		vector<string> lines{};
-		for (auto customer : customers)
-		{
-			lines.push_back(customer.getName() + "," + customer.getSurname() + "," 
-				+ to_string(customer.getNumber()) + "," + to_string(customer.getAmountOfMoney()));
-		}
-
-		updateFile(lines);
-
+		
+		/* Save it to file*/
+		saveToFile(customers);
 	}
-	else
-	{
-		cout << "Nie znaleziono takiego ID w bazie " << '\n';
+	else {
+		cout << "Could not find ID" << '\n';
+		return;
 	}
 }
+

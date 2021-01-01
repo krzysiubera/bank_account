@@ -1,66 +1,54 @@
-#include "MoneyManagement.h"
-#include "Administrator.h"
-#include "Customer.h"
-#include "Utils.h"
-
+ï»¿#include "MoneyManagement.h"
 
 void depositMoney(vector<Customer>& customers)
 {
-	Administrator admin1;
-	cout << "Prosze podac numer konta: ";
+	cout << "Enter your ID number: ";
 	int numberID{};
 	cin >> numberID;
 
+	if (foundID(customers, numberID)) {
+		cout << "Enter amount of money you want to deposit: ";
+		double moneyDeposit{};
+		cin >> moneyDeposit;
+		
+		/* we deposit given amount of money on account*/
+		(customers[numberID]).addMoney(moneyDeposit);
 
-	if (foundID(customers, numberID))
-	{
-		cout << "Prosze podac, ile pieniedzy chce Pan/i wplacic: ";
-		double money{};
-		cin >> money;
-
-		// przesuniêcie wynika z tego, ¿e nasi klienci s¹ ponumerowani od 1
-		(customers[numberID]).addMoney(money);
-
-		// chcemy zapisaæ do pliku, dlatego pobieramy stan konta
-		double currentBalance{ customers[numberID].getAmountOfMoney() };
-
-		// i ka¿demy adminowi wpisaæ to do pliku
-		admin1.updateBalance(customers[numberID], currentBalance, customers);
-
+		/* and save it to file*/
+		saveToFile(customers);
 	}
-
-	else
-	{
-		cout << "Podano nieprawidlowy identyfikator" << '\n';
+	else {
+		cout << "Could not find ID" << '\n';
 		return;
 	}
 }
 
 void withdrawMoney(vector<Customer>& customers)
 {
-	Administrator admin1;
-	cout << "Prosze podac numer konta: ";
+	cout << "Enter your ID number: ";
 	int number{};
 	cin >> number;
 
-	if (foundID(customers, number))
-	{
-		cout << "Prosze podac, ile pieniedzy chce Pan/i wyplacic: ";
+	if (foundID(customers, number)){
+		cout << "Enter amount of money you want to withdraw: ";
 		double money{};
 		cin >> money;
-
-		(customers[number]).subtractMoney(money);
-
-		// chcemy zapisaæ do pliku, dlatego pobieramy stan konta
-		double currentBalance{ customers[number - 1].getAmountOfMoney() };
-
-		// i ka¿demy adminowi wpisaæ to do pliku
-		admin1.updateBalance(customers[number - 1], currentBalance, customers);
+		
+		/* we check if user has enough money in his account*/
+		if (customers[number].getAmountOfMoney() >= money) {
+			/* if he has, we withdraw given amount of money*/
+			(customers[number]).subtractMoney(money);
+			/* and save it to file*/
+			saveToFile(customers);
+		}
+		else {
+			cout << "You do not have enough money to do this transaction" << '\n';
+			return;
+		}
+		
 	}
-
-	else
-	{
-		cout << "Podano nieprawidlowy identyfikator" << '\n';
+	else {
+		cout << "Could not find ID" << '\n';
 		return;
 	}
 }
@@ -68,74 +56,56 @@ void withdrawMoney(vector<Customer>& customers)
 
 void transferMoney(vector<Customer>& customers)
 {
-	Administrator admin1;
-	// osoba, która chce przelaæ komuœ pieni¹dze, musi podaæ swój ID
-	cout << "Prosze podac swoj numer konta: ";
+	cout << "Enter your ID number: ";
 	int numberID_source{};
 	cin >> numberID_source;
 
-
-	if (foundID(customers, numberID_source))
-	{
-		cout << "Prosze podac, komu chce Pan/i przelac pieniadze: ";
+	if (foundID(customers, numberID_source)){
+		cout << "Enter ID of user you want to send money: ";
 		int numberID_destination{};
 		cin >> numberID_destination;
 
-		if (foundID(customers, numberID_destination))
-		{
-			cout << "Prosze podac, ile pieniedzy chce Pan/i przelac: ";
+		if (foundID(customers, numberID_destination)){
+			cout << "Enter amount of money you want to send to other user: ";
 			double moneySent{};
 			cin >> moneySent;
 
-			// przesuniêcie wynika z tego, ¿e nasi klienci s¹ ponumerowani od 1
-			// dodajemy i odejmujemy pieni¹dze odpowiednio
-			// musimy jeszcze sprawdziæ, czy osoba, która chce przelaæ ma wystarczaj¹co pieniêdzy
-			if (customers[numberID_source].getAmountOfMoney() >= moneySent)
-			{
+			/* we check if user has enough money to make this transaction*/
+			if (customers[numberID_source].getAmountOfMoney() >= moneySent){
+				/* if he has, then we add and subtract money respectively*/
 				(customers[numberID_source]).subtractMoney(moneySent);
 				(customers[numberID_destination]).addMoney(moneySent);
+				/* and save it to file*/
+				saveToFile(customers);
 			}
-
-			else
-			{
-				cout << "Nie wykonano transakcji - za malo srodkow na koncie. " << '\n';
+			else {
+				cout << "You do not have enough money to make this transaction " << '\n';
 				return;
 			}
-
-			// chcemy zapisaæ do pliku, dlatego pobieramy stan konta
-			double currentBalance_source{ customers[numberID_source].getAmountOfMoney() };
-			double currentBalance_destination{ customers[numberID_destination].getAmountOfMoney() };
-
-			// i ka¿demy adminowi wpisaæ to do pliku
-			admin1.updateBalance(customers[numberID_source], currentBalance_source, customers);
-			admin1.updateBalance(customers[numberID_destination], currentBalance_destination, customers);
 		}
-		else
-		{
-			cout << "Podano nieprawidlowy identyfikator" << '\n';
+		else {
+			cout << "Could not find ID" << '\n';
 			return;
 		}
 	}
-	else
-	{
-		cout << "Podano nieprawidlowy identyfikator" << '\n';
+	else {
+		cout << "Could not find ID" << '\n';
 		return;
 	}
 }
 
 void showAccount(vector<Customer>& customers)
 {
-	cout << "Prosze podac swoj numer ID: ";
+	cout << "Enter your ID number: ";
 	int numberID{};
 	cin >> numberID;
 
-	if (foundID(customers, numberID))
-	{
+	/* we show information about specific account */
+	if (foundID(customers, numberID)) {
 		cout << customers[numberID] << '\n';
 	}
-	else
-	{
-		cout << "Nie odnaleziono indentyfikatora. \n";
+	else {
+		cout << "Could not find ID" << '\n';
 		return;
 	}
 }
