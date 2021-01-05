@@ -1,1 +1,1 @@
-simple bank account system
+This simple bank account system has been written in C++. A customer can deposit, withdraw and transfer an amount in his account. An administrator can create, modify and delete records. Information about all clients is saved in .txt file and restored upon the program startup.
