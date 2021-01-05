@@ -27,11 +27,36 @@ void Administrator::openAccount(vector<Customer>& customers)
 	string name{};
 	string surname{};
 	double amountOfMoney{};
-	cout << "Prosze podac imie: ";
-	cin >> name;
-	cout << "Prosze podac nazwisko: ";
-	cin >> surname;
-	cout << "Prosze podac poczatkowy balans: ";
+
+	cout << "Enter your name: ";
+	while (true) {
+		cin >> name;
+		/* it is unacceptable if user enters comma, because data it .txt file is separated by comma*/
+		size_t foundComma{ name.find(',') };
+		if (foundComma == string::npos) {
+			break;
+		}
+		else {
+			cout << "Wrong value was entered" << '\n';
+			while (cin.get() != '\n');
+		}
+	}
+
+	cout << "Enter your surname: ";
+	while (true) {
+		cin >> surname;
+		/* it is unacceptable if user enters comma, because data it .txt file is separated by comma*/
+		size_t foundComma{ name.find(',') };
+		if (foundComma == string::npos) {
+			break;
+		}
+		else {
+			cout << "Wrong value was entered" << '\n';
+			while (cin.get() != '\n');
+		}
+	}
+
+	cout << "Enter your initial amount: ";
 	/* Input validation to check if double was entered*/
 	while (true) {
 		if (cin >> amountOfMoney) {
@@ -59,16 +84,51 @@ void Administrator::modifyRecord(vector<Customer>& customers)
 	cout << "Enter number ID to modify: ";
 	int numberIDToModify{};
 	cin >> numberIDToModify;
+	/* Input validation to check if int was entered*/
+	while (true) {
+		if (cin >> numberIDToModify) {
+			/* Valid option*/
+			break;
+		}
+		else {
+			/* if option is not valid, we have to clear error flag, ignore values from buffer*/
+			cout << "Please input a numerical value!" << '\n';
+			cin.clear();
+			while (cin.get() != '\n');
+		}
+	}
 
 	if (foundID(customers, numberIDToModify)){
 		/* Administrator gives new data of customer*/
 		cout << "Enter new name: ";
 		string name{};
-		cin >> name;
+		while (true) {
+			cin >> name;
+			/* it is unacceptable if user enters comma, because data it .txt file is separated by comma*/
+			size_t foundComma{ name.find(',') };
+			if (foundComma == string::npos) {
+				break;
+			}
+			else {
+				cout << "Wrong value was entered" << '\n';
+				while (cin.get() != '\n');
+			}
+		}
 
 		cout << "Enter new surname: ";
 		string surname{};
-		cin >> surname;
+		while (true) {
+			cin >> surname;
+			/* it is unacceptable if user enters comma, because data it .txt file is separated by comma*/
+			size_t foundComma{ name.find(',') };
+			if (foundComma == string::npos) {
+				break;
+			}
+			else {
+				cout << "Wrong value was entered" << '\n';
+				while (cin.get() != '\n');
+			}
+		}
 
 		cout << "Enter new amount of money: ";
 		double amountOfMoney{};
@@ -103,7 +163,19 @@ void Administrator::deleteRecord(vector<Customer> &customers)
 {
 	cout << "Enter ID of customer, which will be deleted: ";
 	int numberIDToDelete{};
-	cin >> numberIDToDelete;
+	/* Input validation to check if double was entered*/
+	while (true) {
+		if (cin >> numberIDToDelete) {
+			/* Valid option*/
+			break;
+		}
+		else {
+			/* if option is not valid, we have to clear error flag, ignore values from buffer*/
+			cout << "Please input a numerical value!" << '\n';
+			cin.clear();
+			while (cin.get() != '\n');
+		}
+	}
 
 	if (foundID(customers, numberIDToDelete)){
 		/* Erase given customer */

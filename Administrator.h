@@ -2,6 +2,7 @@
 #define ADMINISTRATOR_H
 
 #include <vector>
+#include <string>
 #include "Customer.h"
 #include "Utils.h"
 
