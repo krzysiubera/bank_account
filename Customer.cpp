@@ -19,7 +19,6 @@ ostream& operator<<(ostream& out, const Customer& customer)
 
 int Customer::acquireNumber()
 {
-	
 	static int s_id{ 0 };
 	return (++s_id - 1);
 }
@@ -34,15 +33,8 @@ void Customer::setSurname(string surname) { m_surname = surname; }
 void Customer::setAmountOfMoney(double money) { m_amountOfMoney = money; }
 void Customer::setNumber(int number) { m_numberID = number; }
 
-void Customer::addMoney(double money) 
-{
-	m_amountOfMoney += money;
-}
-
-void Customer::subtractMoney(double money)
-{
-	m_amountOfMoney -= money;
-}
+void Customer::addMoney(double money) { m_amountOfMoney += money; }
+void Customer::subtractMoney(double money){ m_amountOfMoney -= money; }
 
 
 

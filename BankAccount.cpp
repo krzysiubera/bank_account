@@ -7,7 +7,6 @@
 #include "Utils.h"
 using namespace std;
 
-
 int main()
 {
 	/* we load data from file at the beginning of the program*/
@@ -17,10 +16,34 @@ int main()
 	cout << "Welcome to bank account system" << '\n';
 
 	int option{};
-	do
-	{
+	while (true){
+
 		cout << '\n';
-		option = getOption();
+		cout << "Please enter an option to choose: \n";
+		cout << "1. Show all accounts (administrator): \n";
+		cout << "2. Create new account (administrator): \n";
+		cout << "3. Deposit money (client): \n";
+		cout << "4. Withdraw money: (client): \n";
+		cout << "5. Transfer money to other account (client): \n";
+		cout << "6. Show state of account (client): \n";
+		cout << "7. Modify a record (administrator): \n";
+		cout << "8. Delete a record (administrator): \n";
+		cout << "9. End the program \n";
+		cout << '\n';
+
+		/* Input validation to check if integer was entered*/
+		while (true) {
+			if (cin >> option) {
+				/* Valid option*/
+				break;
+			}
+			else {
+				/* if option is not valid, we have to clear error flag, ignore values from buffer*/
+				cout << "Please input a numerical value!" << '\n';
+				cin.clear();
+				while (cin.get() != '\n');
+			}
+		}
 
 		switch (option)
 		{
@@ -52,9 +75,8 @@ int main()
 			cout << "End of program" << '\n';
 			return 0;
 		default:
-			cout << "Wrong value" << '\n';
-
+			cout << "You entered invalid value" << '\n';
 		}
-	} while (true);
+	} 
 
 }

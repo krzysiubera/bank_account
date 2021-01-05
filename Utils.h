@@ -16,9 +16,6 @@ struct RawData
 	double amountOfMoney{};
 };
 
-/* this function is responsible for controlling main menu*/
-int getOption();
-
 /* this function reads .txt file at the beginning of the program and then returns data as vector of strings */
 vector<string> readLines();
 

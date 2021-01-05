@@ -1,40 +1,5 @@
 #include "Utils.h"
 
-int getOption()
-{
-	cout << "Please enter an option to choose: \n";
-	cout << "1. Show all accounts (administrator): \n";
-	cout << "2. Create new account (administrator): \n";
-	cout << "3. Deposit money (client): \n";
-	cout << "4. Withdraw money: (client): \n";
-	cout << "5. Transfer money to other account (client): \n";
-	cout << "6. Show state of account (client): \n";
-	cout << "7. Modify a record (administrator): \n";
-	cout << "8. Delete a record (administrator): \n";
-	cout << "9. End the program \n";
-	cout << '\n';
-
-	int option{};
-	cin >> option;
-
-	/* if user wants to end the program, then we do it immediately*/
-	if (option == 9)
-		return option;
-
-	/* if extraction of input has failed */
-	if (cin.fail()){
-		cin.clear();											/* then we clear the flag of error */
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');	/* clean input buffer*/
-		cout << "Wrong data" << '\n';
-	}
-	/* if extraction of input has not failed*/
-	else {
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');	/* clear input buffer */
-		return option;
-	}
-}
-
-
 vector<string> readLines()
 {
 	/* Open file*/

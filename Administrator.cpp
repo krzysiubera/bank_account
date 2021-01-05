@@ -32,7 +32,19 @@ void Administrator::openAccount(vector<Customer>& customers)
 	cout << "Prosze podac nazwisko: ";
 	cin >> surname;
 	cout << "Prosze podac poczatkowy balans: ";
-	cin >> amountOfMoney;
+	/* Input validation to check if double was entered*/
+	while (true) {
+		if (cin >> amountOfMoney) {
+			/* Valid option*/
+			break;
+		}
+		else {
+			/* if option is not valid, we have to clear error flag, ignore values from buffer*/
+			cout << "Please input a numerical value!" << '\n';
+			cin.clear();
+			while (cin.get() != '\n');
+		}
+	}
 
 	/* Creating new user and adding him to the vector of customers*/
 	Customer newCustomer{ name, surname, amountOfMoney };
@@ -60,7 +72,19 @@ void Administrator::modifyRecord(vector<Customer>& customers)
 
 		cout << "Enter new amount of money: ";
 		double amountOfMoney{};
-		cin >> amountOfMoney;
+		/* Input validation to check if double was entered*/
+		while (true) {
+			if (cin >> amountOfMoney) {
+				/* Valid option*/
+				break;
+			}
+			else {
+				/* if option is not valid, we have to clear error flag, ignore values from buffer*/
+				cout << "Please input a numerical value!" << '\n';
+				cin.clear();
+				while (cin.get() != '\n');
+			}
+		}
 		
 		/* Change data of customer by overloading the operator of assignment*/
 		customers[numberIDToModify] = Customer(name, surname, amountOfMoney);
