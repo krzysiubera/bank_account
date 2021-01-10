@@ -1,208 +1,169 @@
-﻿#include "MoneyManagement.h"
+#include "MoneyManagement.h"
 
 void depositMoney(vector<Customer>& customers)
 {
-	cout << "Enter your ID number: ";
-	int numberID{};
-	/* Input validation to check if integer was entered*/
-	while (true) {
-		if (cin >> numberID) {
-			/* Valid option*/
-			break;
-		}
-		else {
-			/* if option is not valid, we have to clear error flag, ignore values from buffer*/
-			cout << "Please input a numerical value!" << '\n';
-			cin.clear();
-			while (cin.get() != '\n');
-		}
-	}
+	cout << "Enter your PESEL: ";
+	string pesel{};
+	cin >> pesel;
 
-	if (foundID(customers, numberID)) {
-		cout << "Enter amount of money you want to deposit: ";
-		double moneyDeposit{};
-		/* Input validation to check if double was entered*/
+	int numberCustomer{ foundPesel(customers, pesel) };
+
+	/* we check if entered PESEL corresponds to any of existing PESELs*/
+	if (numberCustomer != -1) {
+		/* if it exists, then we can ask how much money user wants to deposit*/
+		cout << "Enter an amount of money you want to deposit: ";
+		double amountOfMoney{};
+
+		/* input validation to check if double was entered*/
 		while (true) {
-			if (cin >> moneyDeposit) {
-				/* Valid option*/
+			if (cin >> amountOfMoney) {
+				/* valid option*/
 				break;
 			}
 			else {
-				/* if option is not valid, we have to clear error flag, ignore values from buffer*/
-				cout << "Please input a numerical value!" << '\n';
+				/* if it is not valid, then we have to clear error flag, ignore values from buffer*/
+				cout << "Please input a numerical value " << '\n';
 				cin.clear();
 				while (cin.get() != '\n');
 			}
 		}
-		
-		/* we deposit given amount of money on account*/
-		(customers[numberID]).addMoney(moneyDeposit);
+
+		/* if input validation went fine, then we can store an amount on the account*/
+		customers[numberCustomer].addMoney(amountOfMoney);
 
 		/* and save it to file*/
 		saveToFile(customers);
+
 	}
 	else {
-		cout << "Could not find ID" << '\n';
+		cout << "PESEL has not been found." << '\n';
 		return;
 	}
 }
 
 void withdrawMoney(vector<Customer>& customers)
 {
-	cout << "Enter your ID number: ";
-	int number{};
-	/* Input validation to check if integer was entered*/
-	while (true) {
-		if (cin >> number) {
-			/* Valid option*/
-			break;
-		}
-		else {
-			/* if option is not valid, we have to clear error flag, ignore values from buffer*/
-			cout << "Please input a numerical value!" << '\n';
-			cin.clear();
-			while (cin.get() != '\n');
-		}
-	}
+	cout << "Enter your PESEL: ";
+	string pesel{};
+	cin >> pesel;
 
-	if (foundID(customers, number)){
-		cout << "Enter amount of money you want to withdraw: ";
-		double money{};
-		/* Input validation to check if double was entered*/
+	int numberCustomer{ foundPesel(customers, pesel) };
+
+	/* we check if entered PESEL corresponds to any of existing PESELs*/
+	if (numberCustomer != -1) {
+		/* if it exists, then we can ask how much money user wants to withdraw*/
+		cout << "Enter an amount of money you want to withdraw: ";
+		double amountOfMoney{};
+
+		/* input validation to check if double was entered*/
 		while (true) {
-			if (cin >> money) {
-				/* Valid option*/
+			if (cin >> amountOfMoney) {
+				/* valid option*/
 				break;
 			}
 			else {
-				/* if option is not valid, we have to clear error flag, ignore values from buffer*/
-				cout << "Please input a numerical value!" << '\n';
+				/* if it is not valid, then we have to clear error flag, ignore values from buffer*/
+				cout << "Please input a numerical value " << '\n';
 				cin.clear();
 				while (cin.get() != '\n');
 			}
 		}
-		
-		/* we check if user has enough money in his account*/
-		if (customers[number].getAmountOfMoney() >= money) {
-			/* if he has, we withdraw given amount of money*/
-			(customers[number]).subtractMoney(money);
-			/* and save it to file*/
+
+		/* we have to check if user has enough money to make this withdrawal*/
+		if (customers[numberCustomer].getAmountOfMoney() >= amountOfMoney) {
+			/* if this is respected, we withdraw given amount of money*/
+			customers[numberCustomer].subtractMoney(amountOfMoney);
+			/* and save it to file */
 			saveToFile(customers);
 		}
 		else {
-			cout << "You do not have enough money to do this transaction" << '\n';
+			cout << "You do not have enough money to make this transaction." << '\n';
 			return;
 		}
-		
+
 	}
 	else {
-		cout << "Could not find ID" << '\n';
+		cout << "PESEL has not been found." << '\n';
 		return;
 	}
 }
 
-
 void transferMoney(vector<Customer>& customers)
 {
-	cout << "Enter your ID number: ";
-	int numberID_source{};
-	/* Input validation to check if integer was entered*/
-	while (true) {
-		if (cin >> numberID_source) {
-			/* Valid option*/
-			break;
-		}
-		else {
-			/* if option is not valid, we have to clear error flag, ignore values from buffer*/
-			cout << "Please input a numerical value!" << '\n';
-			cin.clear();
-			while (cin.get() != '\n');
-		}
-	}
+	cout << "Enter your PESEL: ";
+	string peselSource{};
+	cin >> peselSource;
 
-	if (foundID(customers, numberID_source)){
-		cout << "Enter ID of user you want to send money: ";
-		int numberID_destination{};
-		/* Input validation to check if integer was entered*/
-		while (true) {
-			if (cin >> numberID_destination) {
-				/* Valid option*/
-				break;
-			}
-			else {
-				/* if option is not valid, we have to clear error flag, ignore values from buffer*/
-				cout << "Please input a numerical value!" << '\n';
-				cin.clear();
-				while (cin.get() != '\n');
-			}
-		}
+	int numberCustomerSource{ foundPesel(customers, peselSource) };
 
-		if (foundID(customers, numberID_destination)){
-			cout << "Enter amount of money you want to send to other user: ";
-			double moneySent{};
-			/* Input validation to check if integer was entered*/
+	/* we check if entered PESEL corresponds to any of existing PESELs*/
+	if (numberCustomerSource != -1) {
+
+		cout << "Enter PESEL of person you want to send money to: ";
+		string peselDestination{};
+		cin >> peselDestination;
+
+		int numberCustomerDestination{ foundPesel(customers, peselDestination) };
+		/* same as above */
+		if (numberCustomerDestination != -1) {
+
+			cout << "Enter an amount of money you want to send: ";
+			double amountOfMoney{};
+			
+			/* input validation to check if double was entered*/
 			while (true) {
-				if (cin >> moneySent) {
-					/* Valid option*/
+				if (cin >> amountOfMoney) {
+					/* valid option*/
 					break;
 				}
 				else {
-					/* if option is not valid, we have to clear error flag, ignore values from buffer*/
-					cout << "Please input a numerical value!" << '\n';
+					/* if it is not valid, then we have to clear error flag, ignore values from buffer*/
+					cout << "Please input a numerical value " << '\n';
 					cin.clear();
 					while (cin.get() != '\n');
 				}
 			}
 
-			/* we check if user has enough money to make this transaction*/
-			if (customers[numberID_source].getAmountOfMoney() >= moneySent){
-				/* if he has, then we add and subtract money respectively*/
-				(customers[numberID_source]).subtractMoney(moneySent);
-				(customers[numberID_destination]).addMoney(moneySent);
+			/* we have to check if user has enough money to make this withdrawal*/
+			if (customers[numberCustomerSource].getAmountOfMoney() >= amountOfMoney) {
+
+				/* if it is respected, then we make respective operations*/
+				customers[numberCustomerSource].subtractMoney(amountOfMoney);
+				customers[numberCustomerDestination].addMoney(amountOfMoney);
+
 				/* and save it to file*/
 				saveToFile(customers);
+
 			}
 			else {
-				cout << "You do not have enough money to make this transaction " << '\n';
-				return;
+				cout << "You do not have enough money to make this transaction. " << '\n';
 			}
+
 		}
 		else {
-			cout << "Could not find ID" << '\n';
+			cout << "PESEL has not been found." << '\n';
 			return;
 		}
 	}
 	else {
-		cout << "Could not find ID" << '\n';
+		cout << "PESEL has not been found." << '\n';
 		return;
 	}
 }
 
 void showAccount(vector<Customer>& customers)
 {
-	cout << "Enter your ID number: ";
-	int numberID{};
-	cin >> numberID;
-	/* Input validation to check if integer was entered*/
-	while (true) {
-		if (cin >> numberID) {
-			/* Valid option*/
-			break;
-		}
-		else {
-			/* if option is not valid, we have to clear error flag, ignore values from buffer*/
-			cout << "Please input a numerical value!" << '\n';
-			cin.clear();
-			while (cin.get() != '\n');
-		}
-	}
+	cout << "Enter your PESEL: ";
+	string pesel{};
+	cin >> pesel;
 
-	/* we show information about specific account */
-	if (foundID(customers, numberID)) {
-		cout << customers[numberID] << '\n';
+	int numberCustomer{ foundPesel(customers, pesel) };
+
+	if (numberCustomer != -1) {
+		cout << customers[numberCustomer] << '\n';
 	}
 	else {
-		cout << "Could not find ID" << '\n';
+		cout << "PESEL has not been found. " << '\n';
 		return;
 	}
 }

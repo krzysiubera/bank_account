@@ -1,9 +1,9 @@
 #ifndef MONEYMANAGEMENT_H
 #define MONEYMANAGEMENT_H
 
+#include <vector>
 #include "Customer.h"
 #include "Utils.h"
-#include <vector>
 
 /* this function lets us deposit money on account*/
 void depositMoney(vector<Customer>& customers);
@@ -14,7 +14,7 @@ void withdrawMoney(vector<Customer>& customers);
 /* this function lets us transfer money to other account*/
 void transferMoney(vector<Customer>& customers);
 
-/* this function show us state of account*/
+/* this function shows us information about specific account*/
 void showAccount(vector<Customer>& customers);
 
-#endif;
+#endif

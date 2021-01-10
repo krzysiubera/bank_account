@@ -3,15 +3,15 @@
 #include <vector>
 #include "Customer.h"
 #include "Administrator.h"
-#include "MoneyManagement.h"
 #include "Utils.h"
+#include "MoneyManagement.h"
 using namespace std;
 
 int main()
 {
 	/* we load data from file at the beginning of the program*/
 	Administrator admin1;
-	vector<Customer> customers = admin1.loadState();
+	vector<Customer> customers = loadState();
 
 	cout << "Welcome to bank account system" << '\n';
 

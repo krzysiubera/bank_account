@@ -1,5 +1,19 @@
 #include "Utils.h"
 
+vector<Customer> loadState()
+{
+	vector<string> lines{ readLines() };
+	vector<Customer> customers{};
+
+	for (auto line : lines) {
+		RawData data = parseLine(line);
+		Customer customer(data.name, data.surname, data.pesel, data.amountOfMoney);
+		customers.push_back(customer);
+	}
+
+	return customers;
+}
+
 vector<string> readLines()
 {
 	/* Open file*/
@@ -30,58 +44,46 @@ RawData parseLine(string line)
 {
 	size_t index1 = line.find(",", 0);
 	string name = line.substr(0, index1);
-
-
+	
 	line.erase(0, index1 + 1);
 	size_t index2 = line.find(",", 0);
 	string surname = line.substr(0, index2);
 
 	line.erase(0, index2 + 1);
+	size_t index3 = line.find(",", 0);
+	string pesel = line.substr(0, index3);
 	
-	stringstream s(line);
-	int number{};
-	char dot{};
+	line.erase(0, index3 + 1);
+	stringstream str(line);
 	double amountOfMoney{};
-	s >> number >> dot >> amountOfMoney;
-	
+	str >> amountOfMoney;
 
-	RawData r;
-	r.name = name;
-	r.surname = surname;
-	r.IDnumber = number;
-	r.amountOfMoney = amountOfMoney;
-	return r;
-}
-
-bool foundID(vector<Customer>& customers, int number)
-{
-	vector<int> IDnumbers{};
-	for (auto customer : customers)
-	{
-		IDnumbers.push_back(customer.getNumber());
-	}
-
-	vector<int>::iterator iter;
-	iter = find(IDnumbers.begin(), IDnumbers.end(), number);
-
-	return (iter != IDnumbers.end());
+	RawData data;
+	data.name = name;
+	data.surname = surname;
+	data.pesel = pesel;
+	data.amountOfMoney = amountOfMoney;
+	return data;
 }
 
 void saveToFile(vector<Customer> customers)
 {
 	/* Creating vector of strings with needed data*/
 	vector<string> lines{};
+
+	/* packing data to file */
 	for (auto customer : customers) {
 		lines.push_back(customer.getName() + "," + customer.getSurname() + "," +
-			to_string(customer.getNumber()) + "," + to_string(customer.getAmountOfMoney()));
+			customer.getPesel() + "," + to_string(customer.getAmountOfMoney()));
 	}
 
-	/* Opening file*/
+	/* opening file*/
 	ofstream file{ "sample.txt" };
-	if (!file)
+	if (!file) {
 		cerr << "File could not be opened" << endl;
+	}
 
-	/*Writing to file*/
+	/* writing to file */
 	for (size_t count{ 0 }; count < lines.size(); ++count) {
 		file << lines[count] << endl;
 	}
@@ -89,3 +91,19 @@ void saveToFile(vector<Customer> customers)
 	/* Closing file */
 	file.close();
 }
+
+int foundPesel(vector<Customer>& customers, string pesel)
+{
+	int numberOfAccount{ 0 };
+
+	for (auto customer : customers) {
+		if (customer.getPesel() == pesel) {
+			return numberOfAccount;
+		}
+		else {
+			numberOfAccount++;
+		}
+	}
+	return -1;
+}
+

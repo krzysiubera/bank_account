@@ -11,42 +11,29 @@ class Customer
 private:
 	string m_name{};
 	string m_surname{};
-	int m_numberID{};
+	string m_pesel{};
 	double m_amountOfMoney{};
 
 public:
 	/* Constructor for created client */
-	Customer(string name, string surname, double amountOfMoney):
-		m_name{ name }, m_surname{ surname }, m_amountOfMoney{ amountOfMoney }
-	{
-		m_numberID = acquireNumber();
-	}
+	Customer(string name, string surname, string pesel, double amountOfMoney):
+		m_name{name}, m_surname{surname}, m_pesel{pesel}, m_amountOfMoney{amountOfMoney} { }
 
-	/* Constructor for client read from file*/
-	Customer(string name, string surname, int number_ID, double amountOfMoney):
-		m_name{name}, m_surname{surname}, m_numberID{number_ID}, m_amountOfMoney{amountOfMoney} 
-	{	
-		int temp{ acquireNumber() };
-	}
-
-	/* Overloaded << operator and assignment operator */
-	Customer& operator=(const Customer& customer);
+	/* Overloaded << operator */
 	friend ostream& operator<<(ostream& out, const Customer& customer);
 
-	/* This function gives ID to new users*/
-	int acquireNumber();
 
 	/* Getters*/
-	int getNumber() const;
 	string getName() const;
-	string getSurname() const ;
-	double getAmountOfMoney() const ;
+	string getSurname() const;
+	string getPesel() const ;
+	double getAmountOfMoney() const;
 
 	/*Setters*/
 	void setName(string name);
 	void setSurname(string surname);
-	void setAmountOfMoney(double money);
-	void setNumber(int number);
+	void setPesel(string pesel);
+	void setAmountOfMoney(double amountOfMoney);
 
 	/* These functions modify amount of money of users*/
 	void addMoney(double money);
