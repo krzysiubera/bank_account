@@ -29,7 +29,7 @@ RawData parseLine(string line);
 void saveToFile(vector<Customer> customers);
 
 /* this function accepts PESEL as input parameter
-* if it was found in vector of customers, then it returns its index
+* if it was found in vector of customers, then it returns index of given customer in vector of customers
 * if it was not found, then it returns -1
 */
 int foundPesel(vector<Customer>& customers, string pesel);

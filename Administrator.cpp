@@ -12,7 +12,7 @@ void Administrator::openAccount(vector<Customer>& customers)
 {
 	string name{};
 	string surname{};
-	string pesel{};
+	string newPesel{};
 	double amountOfMoney{};
 
 	cout << "Enter your name: ";
@@ -47,9 +47,9 @@ void Administrator::openAccount(vector<Customer>& customers)
 
 	cout << "Enter your PESEL: ";
 	while (true) {
-		cin >> pesel;
+		cin >> newPesel;
 		/* it is unacceptable if user enters comma */
-		size_t foundComma{ pesel.find(',') };
+		size_t foundComma{ newPesel.find(',') };
 		if (foundComma == string::npos) {
 			break;
 		}
@@ -57,6 +57,20 @@ void Administrator::openAccount(vector<Customer>& customers)
 			cout << "This data cannot contain comma." << '\n';
 			/* Clearing input buffer*/
 			while (cin.get() != '\n');
+		}
+	}
+
+	/* that's not enough - we also have to provide that every PESEL is unique*/
+	vector<string> allPesels{};
+
+	for (auto customer : customers) {
+		allPesels.push_back(customer.getPesel());
+	}
+
+	for (auto pesel : allPesels) {
+		if (pesel == newPesel) {
+			cout << "All PESELs has to be unique" << '\n';
+			return;
 		}
 	}
 
@@ -74,8 +88,10 @@ void Administrator::openAccount(vector<Customer>& customers)
 	}
 
 	/* if everything went fine, we create new customer*/
-	Customer newCustomer(name, surname, pesel, amountOfMoney);
+	Customer newCustomer(name, surname, newPesel, amountOfMoney);
 	customers.push_back(newCustomer);
+
+	cout << "A customer with data: " << newCustomer << " has been created." << '\n';
 
 	/* and save it to file*/
 	saveToFile(customers);
@@ -176,6 +192,8 @@ void Administrator::modifyRecord(vector<Customer>& customers)
 		customers[numberModified].setPesel(newPesel);
 		customers[numberModified].setAmountOfMoney(newAmountOfMoney);
 
+		cout << "Data has been modified. " << '\n';
+
 		/* and then save it to file*/
 		saveToFile(customers);
 
@@ -197,12 +215,14 @@ void Administrator::deleteRecord(vector<Customer>& customers)
 
 	if (numberDeleted != -1) {
 		customers.erase(customers.begin() + numberDeleted);
+
+		cout << "Account has been deleted." << '\n';
+
+		/* save it to file*/
+		saveToFile(customers);
 	}
 	else {
 		cout << "PESEL has not been found." << '\n';
 		return;
 	}
-
-	/* save it to file*/
-	saveToFile(customers);
 }

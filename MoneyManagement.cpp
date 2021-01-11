@@ -31,6 +31,10 @@ void depositMoney(vector<Customer>& customers)
 		/* if input validation went fine, then we can store an amount on the account*/
 		customers[numberCustomer].addMoney(amountOfMoney);
 
+		cout << "An amount of " << amountOfMoney << " has been stored on "
+			<< customers[numberCustomer].getName() << " " << customers[numberCustomer].getSurname()
+			<< " account. " << '\n';
+
 		/* and save it to file*/
 		saveToFile(customers);
 
@@ -73,6 +77,11 @@ void withdrawMoney(vector<Customer>& customers)
 		if (customers[numberCustomer].getAmountOfMoney() >= amountOfMoney) {
 			/* if this is respected, we withdraw given amount of money*/
 			customers[numberCustomer].subtractMoney(amountOfMoney);
+
+			cout << "An amount of " << amountOfMoney << " has been withdrawn from "
+				<< customers[numberCustomer].getName() << " " << customers[numberCustomer].getSurname()
+				<< " account. " << '\n';
+
 			/* and save it to file */
 			saveToFile(customers);
 		}
@@ -130,6 +139,12 @@ void transferMoney(vector<Customer>& customers)
 				/* if it is respected, then we make respective operations*/
 				customers[numberCustomerSource].subtractMoney(amountOfMoney);
 				customers[numberCustomerDestination].addMoney(amountOfMoney);
+
+				cout << "An amount of " << amountOfMoney << " has been transferred from "
+					<< customers[numberCustomerSource].getName() << " " << customers[numberCustomerSource].getSurname()
+					<< " account to " << customers[numberCustomerDestination].getName()
+					<< " " << customers[numberCustomerDestination].getSurname() << " account." << '\n';
+
 
 				/* and save it to file*/
 				saveToFile(customers);

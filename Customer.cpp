@@ -2,9 +2,9 @@
 
 ostream& operator<<(ostream& out, const Customer& customer)
 {
-	out << "Name: " << customer.m_name << '\t'
-		<< "Surname: " << customer.m_surname << '\t'
-		<< "PESEL: " << customer.m_pesel << '\t'
+	out << "Name: " << customer.m_name << "\t\t"
+		<< "Surname: " << customer.m_surname << "\t\t"
+		<< "PESEL: " << customer.m_pesel << "\t\t"
 		<< "Amount of money: " << customer.m_amountOfMoney;
 	return out;
 }
