@@ -5,6 +5,7 @@ ostream& operator<<(ostream& out, const Customer& customer)
 	out << "Name: " << customer.m_name << "\t\t"
 		<< "Surname: " << customer.m_surname << "\t\t"
 		<< "PESEL: " << customer.m_pesel << "\t\t"
+		<< "Number of account: " << customer.m_numAccount << "\t\t"
 		<< "Amount of money: " << customer.m_amountOfMoney;
 	return out;
 }
@@ -12,11 +13,13 @@ ostream& operator<<(ostream& out, const Customer& customer)
 string Customer::getName() const { return m_name; }
 string Customer::getSurname() const { return m_surname; }
 string Customer::getPesel() const { return m_pesel; }
+string Customer::getNumAccount() const { return m_numAccount; }
 double Customer::getAmountOfMoney() const { return m_amountOfMoney; }
 
 void Customer::setName(string name) { m_name = name; }
 void Customer::setSurname(string surname) { m_surname = surname; }
 void Customer::setPesel(string pesel) { m_pesel = pesel; }
+void Customer::setNumAccount(string numAccount) { m_numAccount = numAccount; }
 void Customer::setAmountOfMoney(double amountOfMoney) { m_amountOfMoney = amountOfMoney; }
 
 void Customer::addMoney(double money) { m_amountOfMoney += money; }

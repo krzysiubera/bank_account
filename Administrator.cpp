@@ -13,66 +13,32 @@ void Administrator::openAccount(vector<Customer>& customers)
 	string name{};
 	string surname{};
 	string newPesel{};
+	string numAccount{};
 	double amountOfMoney{};
 
 	cout << "Enter your name: ";
-	while (true) {
-		cin >> name;
-		/* it is unacceptable if user enters comma */
-		size_t foundComma{ name.find(',') };
-		if (foundComma == string::npos) {
-			break;
-		}
-		else {
-			cout << "This data cannot contain comma." << '\n';
-			/* Clearing input buffer*/
-			while (cin.get() != '\n');
-		}
-	}
+	cin >> name;
 
 	cout << "Enter your surname: ";
-	while (true) {
-		cin >> surname;
-		/* it is unacceptable if user enters comma */
-		size_t foundComma{ surname.find(',') };
-		if (foundComma == string::npos) {
-			break;
-		}
-		else {
-			cout << "This data cannot contain comma." << '\n';
-			/* Clearing input buffer*/
-			while (cin.get() != '\n');
-		}
-	}
+	cin >> surname;
 
 	cout << "Enter your PESEL: ";
-	while (true) {
-		cin >> newPesel;
-		/* it is unacceptable if user enters comma */
-		size_t foundComma{ newPesel.find(',') };
-		if (foundComma == string::npos) {
-			break;
-		}
-		else {
-			cout << "This data cannot contain comma." << '\n';
-			/* Clearing input buffer*/
-			while (cin.get() != '\n');
-		}
-	}
+	cin >> newPesel;
 
-	/* that's not enough - we also have to provide that every PESEL is unique*/
-	vector<string> allPesels{};
+	cout << "Enter your number of account: ";
+	cin >> numAccount;
 
+	/* checking if this number is unique*/
+	vector<string> existingNumAccounts{};
 	for (auto customer : customers) {
-		allPesels.push_back(customer.getPesel());
+		existingNumAccounts.push_back(customer.getNumAccount());
+	}
+	auto iter = find(existingNumAccounts.begin(), existingNumAccounts.end(), numAccount);
+	if (iter != existingNumAccounts.end()) {
+		cout << "Number of account has to be unique" << '\n';
+		return;
 	}
 
-	for (auto pesel : allPesels) {
-		if (pesel == newPesel) {
-			cout << "All PESELs has to be unique" << '\n';
-			return;
-		}
-	}
 
 	cout << "Enter your initial amount: ";
 	while (true) {
@@ -88,7 +54,7 @@ void Administrator::openAccount(vector<Customer>& customers)
 	}
 
 	/* if everything went fine, we create new customer*/
-	Customer newCustomer(name, surname, newPesel, amountOfMoney);
+	Customer newCustomer(name, surname, newPesel, numAccount, amountOfMoney);
 	customers.push_back(newCustomer);
 
 	cout << "A customer with data: " << newCustomer << " has been created." << '\n';
@@ -99,75 +65,29 @@ void Administrator::openAccount(vector<Customer>& customers)
 
 void Administrator::modifyRecord(vector<Customer>& customers)
 {
-	cout << "Enter PESEL of person, whose data you want to modify: ";
-	string pesel{};
-	cin >> pesel;
+	cout << "Enter number of account of person, whose data you want to modify: ";
+	string numAccount{};
+	cin >> numAccount;
 
-	int numberModified{ foundPesel(customers, pesel) };
+	int numberModified{ foundNumAccount(customers, numAccount) };
 
 	if (numberModified != -1) {
 
 		cout << "Enter new name: ";
 		string newName{};
-		while (true) {
-			cin >> newName;
-			/* we are checking if user entered comma*/
-			size_t foundComma{ newName.find(',') };
-			if (foundComma == string::npos) {
-				break;
-			}
-			else {
-				cout << "This data cannot contain comma." << '\n';
-				/* Clearing input buffer*/
-				while (cin.get() != '\n');
-			}
-		}
+		cin >> newName;
 
 		cout << "Enter new surname: ";
 		string newSurname{};
-		while (true) {
-			cin >> newSurname;
-			/* we are checking if user entered comma*/
-			size_t foundComma{ newSurname.find(',') };
-			if (foundComma == string::npos) {
-				break;
-			}
-			else {
-				cout << "This data cannot contain comma." << '\n';
-				/* Clearing input buffer*/
-				while (cin.get() != '\n');
-			}
-		}
+		cin >> newSurname;
 
 		cout << "Enter new PESEL: ";
 		string newPesel{};
-		while (true) {
-			cin >> newPesel;
-			/* we are checking if user entered comma*/
-			size_t foundComma{ newPesel.find(',') };
-			if (foundComma == string::npos) {
-				break;
-			}
-			else {
-				cout << "This data cannot contain comma." << '\n';
-				/* Clearing input buffer*/
-				while (cin.get() != '\n');
-			}
-		}
+		cin >> newPesel;
 
-		/* that's not enough - we also have to provide that every PESEL is unique*/
-		vector<string> allPesels{};
-
-		for (auto customer : customers) {
-			allPesels.push_back(customer.getPesel());
-		}
-
-		for (auto pesel : allPesels) {
-			if (pesel == newPesel) {
-				cout << "All PESELs has to be unique" << '\n';
-				return;
-			}
-		}
+		cout << "Enter new number of account: ";
+		string newNumAccount{};
+		cin >> newNumAccount;
 
 		cout << "Enter new amount of money: ";
 		double newAmountOfMoney{};
@@ -190,6 +110,7 @@ void Administrator::modifyRecord(vector<Customer>& customers)
 		customers[numberModified].setName(newName);
 		customers[numberModified].setSurname(newSurname);
 		customers[numberModified].setPesel(newPesel);
+		customers[numberModified].setNumAccount(newNumAccount);
 		customers[numberModified].setAmountOfMoney(newAmountOfMoney);
 
 		cout << "Data has been modified. " << '\n';
@@ -199,7 +120,7 @@ void Administrator::modifyRecord(vector<Customer>& customers)
 
 	}
 	else {
-		cout << "PESEL has not been found." << '\n';
+		cout << "Number of account has not been found. " << '\n';
 		return;
 	}
 
@@ -207,11 +128,11 @@ void Administrator::modifyRecord(vector<Customer>& customers)
 
 void Administrator::deleteRecord(vector<Customer>& customers)
 {
-	cout << "Enter PESEL of person you want to delete: ";
-	string pesel{};
-	cin >> pesel;
+	cout << "Enter account number of person you want to delete: ";
+	string numAccount{};
+	cin >> numAccount;
 	
-	int numberDeleted{ foundPesel(customers, pesel) };
+	int numberDeleted{ foundNumAccount(customers, numAccount) };
 
 	if (numberDeleted != -1) {
 		customers.erase(customers.begin() + numberDeleted);
@@ -222,7 +143,7 @@ void Administrator::deleteRecord(vector<Customer>& customers)
 		saveToFile(customers);
 	}
 	else {
-		cout << "PESEL has not been found." << '\n';
+		cout << "Number of account has not been found. " << '\n';
 		return;
 	}
 }

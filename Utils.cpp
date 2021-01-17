@@ -7,7 +7,7 @@ vector<Customer> loadState()
 
 	for (auto line : lines) {
 		RawData data = parseLine(line);
-		Customer customer(data.name, data.surname, data.pesel, data.amountOfMoney);
+		Customer customer(data.name, data.surname, data.pesel, data.numAccount, data.amountOfMoney);
 		customers.push_back(customer);
 	}
 
@@ -54,6 +54,10 @@ RawData parseLine(string line)
 	string pesel = line.substr(0, index3);
 	
 	line.erase(0, index3 + 1);
+	size_t index4 = line.find(",", 0);
+	string numAccount = line.substr(0, index4);
+
+	line.erase(0, index4 + 1);
 	stringstream str(line);
 	double amountOfMoney{};
 	str >> amountOfMoney;
@@ -62,6 +66,7 @@ RawData parseLine(string line)
 	data.name = name;
 	data.surname = surname;
 	data.pesel = pesel;
+	data.numAccount = numAccount;
 	data.amountOfMoney = amountOfMoney;
 	return data;
 }
@@ -74,7 +79,8 @@ void saveToFile(vector<Customer> customers)
 	/* packing data to file */
 	for (auto customer : customers) {
 		lines.push_back(customer.getName() + "," + customer.getSurname() + "," +
-			customer.getPesel() + "," + to_string(customer.getAmountOfMoney()));
+			customer.getPesel() + ","  + customer.getNumAccount() + ","
+			+ to_string(customer.getAmountOfMoney()));
 	}
 
 	/* opening file*/
@@ -92,12 +98,12 @@ void saveToFile(vector<Customer> customers)
 	file.close();
 }
 
-int foundPesel(vector<Customer>& customers, string pesel)
+int foundNumAccount(vector<Customer>& customers, string numAccount)
 {
 	int numberOfAccount{ 0 };
 
 	for (auto customer : customers) {
-		if (customer.getPesel() == pesel) {
+		if (customer.getNumAccount() == numAccount) {
 			return numberOfAccount;
 		}
 		else {

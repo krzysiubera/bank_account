@@ -13,6 +13,7 @@ struct RawData
 	string name{};
 	string surname{};
 	string pesel{};
+	string numAccount{};
 	double amountOfMoney{};
 };
 
@@ -32,7 +33,7 @@ void saveToFile(vector<Customer> customers);
 * if it was found in vector of customers, then it returns index of given customer in vector of customers
 * if it was not found, then it returns -1
 */
-int foundPesel(vector<Customer>& customers, string pesel);
+int foundNumAccount(vector<Customer>& customers, string numAccount);
 
 
 #endif

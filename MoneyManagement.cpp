@@ -2,13 +2,13 @@
 
 void depositMoney(vector<Customer>& customers)
 {
-	cout << "Enter your PESEL: ";
-	string pesel{};
-	cin >> pesel;
+	cout << "Enter your number of account: ";
+	string numAccount{};
+	cin >> numAccount;
 
-	int numberCustomer{ foundPesel(customers, pesel) };
+	int numberCustomer{ foundNumAccount(customers, numAccount) };
 
-	/* we check if entered PESEL corresponds to any of existing PESELs*/
+	/* we check if entered number corresponds to any existing numbers*/
 	if (numberCustomer != -1) {
 		/* if it exists, then we can ask how much money user wants to deposit*/
 		cout << "Enter an amount of money you want to deposit: ";
@@ -40,18 +40,18 @@ void depositMoney(vector<Customer>& customers)
 
 	}
 	else {
-		cout << "PESEL has not been found." << '\n';
+		cout << "Number of account has not been found. " << '\n';
 		return;
 	}
 }
 
 void withdrawMoney(vector<Customer>& customers)
 {
-	cout << "Enter your PESEL: ";
-	string pesel{};
-	cin >> pesel;
+	cout << "Enter your number of account: ";
+	string numAccount{};
+	cin >> numAccount;
 
-	int numberCustomer{ foundPesel(customers, pesel) };
+	int numberCustomer{ foundNumAccount(customers, numAccount) };
 
 	/* we check if entered PESEL corresponds to any of existing PESELs*/
 	if (numberCustomer != -1) {
@@ -92,27 +92,28 @@ void withdrawMoney(vector<Customer>& customers)
 
 	}
 	else {
-		cout << "PESEL has not been found." << '\n';
+		cout << "Number of account has not been found. " << '\n';
 		return;
 	}
 }
 
 void transferMoney(vector<Customer>& customers)
 {
-	cout << "Enter your PESEL: ";
-	string peselSource{};
-	cin >> peselSource;
+	cout << "Enter your number of account: ";
+	string numAccountSource{};
+	cin >> numAccountSource;
 
-	int numberCustomerSource{ foundPesel(customers, peselSource) };
+	int numberCustomerSource{ foundNumAccount(customers, numAccountSource) };
 
 	/* we check if entered PESEL corresponds to any of existing PESELs*/
 	if (numberCustomerSource != -1) {
 
-		cout << "Enter PESEL of person you want to send money to: ";
-		string peselDestination{};
-		cin >> peselDestination;
+		cout << "Enter number of account of person you want to send money to: ";
+		string numAccountDestination{};
+		cin >> numAccountDestination;
 
-		int numberCustomerDestination{ foundPesel(customers, peselDestination) };
+		int numberCustomerDestination{ foundNumAccount(customers, numAccountDestination) };
+
 		/* same as above */
 		if (numberCustomerDestination != -1) {
 
@@ -156,29 +157,29 @@ void transferMoney(vector<Customer>& customers)
 
 		}
 		else {
-			cout << "PESEL has not been found." << '\n';
+			cout << "Number of account has not been found. " << '\n';
 			return;
 		}
 	}
 	else {
-		cout << "PESEL has not been found." << '\n';
+		cout << "Number of account has not been found. " << '\n';
 		return;
 	}
 }
 
 void showAccount(vector<Customer>& customers)
 {
-	cout << "Enter your PESEL: ";
-	string pesel{};
-	cin >> pesel;
+	cout << "Enter your number of account: ";
+	string numAccount{};
+	cin >> numAccount;
 
-	int numberCustomer{ foundPesel(customers, pesel) };
+	int numberCustomer{ foundNumAccount(customers, numAccount) };
 
 	if (numberCustomer != -1) {
 		cout << customers[numberCustomer] << '\n';
 	}
 	else {
-		cout << "PESEL has not been found. " << '\n';
+		cout << "Number of account has not been found. " << '\n';
 		return;
 	}
 }
