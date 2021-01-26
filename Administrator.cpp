@@ -28,18 +28,6 @@ void Administrator::openAccount(vector<Customer>& customers)
 	cout << "Enter your number of account: ";
 	cin >> numAccount;
 
-	/* checking if this number is unique*/
-	vector<string> existingNumAccounts{};
-	for (auto customer : customers) {
-		existingNumAccounts.push_back(customer.getNumAccount());
-	}
-	auto iter = find(existingNumAccounts.begin(), existingNumAccounts.end(), numAccount);
-	if (iter != existingNumAccounts.end()) {
-		cout << "Number of account has to be unique" << '\n';
-		return;
-	}
-
-
 	cout << "Enter your initial amount: ";
 	while (true) {
 		if (cin >> amountOfMoney) {
@@ -73,9 +61,6 @@ void Administrator::modifyRecord(vector<Customer>& customers)
 
 	if (numberModified != -1) {
 
-		/* we store old number of account if administrator decides to not modify it*/
-		string oldNumAccount{ customers[numberModified].getNumAccount() };
-
 		cout << "Enter new name: ";
 		string newName{};
 		cin >> newName;
@@ -91,17 +76,6 @@ void Administrator::modifyRecord(vector<Customer>& customers)
 		cout << "Enter new number of account: ";
 		string newNumAccount{};
 		cin >> newNumAccount;
-
-		/* checking if this number is unique*/
-		vector<string> existingNumAccounts{};
-		for (auto customer : customers) {
-			existingNumAccounts.push_back(customer.getNumAccount());
-		}
-		auto iter = find(existingNumAccounts.begin(), existingNumAccounts.end(), numAccount);
-		if (iter != existingNumAccounts.end() && (newNumAccount != oldNumAccount) ) {
-			cout << "Number of account has to be unique" << '\n';
-			return;
-		}
 
 		cout << "Enter new amount of money: ";
 		double newAmountOfMoney{};
